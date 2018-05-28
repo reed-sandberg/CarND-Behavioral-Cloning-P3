@@ -31,7 +31,7 @@ with open('./driving_log.csv') as csvfile:
     for line in reader:
         samples.append(line)
 
-train_samples, validation_samples = train_test_split(samples, test_size=0.2)
+train_samples, validation_samples = train_test_split(samples, test_size=0.02)
 
 def generator(samples, batch_size=32):
     #import pdb; pdb.set_trace()
@@ -45,9 +45,9 @@ def generator(samples, batch_size=32):
             angles = []
             for batch_sample in batch_samples:
                 name = './IMG/'+batch_sample[0].split('/')[-1]
-                center_image = cv2.imread(name)
-                #center_image = cv2.imread(name, cv2.IMREAD_GRAYSCALE)
-                #center_image = center_image.reshape(160, 320, 1)
+                #center_image = cv2.imread(name)
+                center_image = cv2.imread(name, cv2.IMREAD_GRAYSCALE)
+                center_image = center_image.reshape(160, 320, 1)
                 center_angle = float(batch_sample[3])
                 images.append(center_image)
                 angles.append(center_angle)
@@ -61,7 +61,7 @@ def generator(samples, batch_size=32):
 train_generator = generator(train_samples, batch_size=32)
 validation_generator = generator(validation_samples, batch_size=32)
 
-ch, row, col = 3, 66, 320  # Trimmed image format
+ch, row, col = 1, 80, 320  # Trimmed image format
 
 nb_epoch = 1
 dropout_rate = 0.25
@@ -69,7 +69,7 @@ dropout_rate = 0.25
 model = Sequential()
 
 # set up cropping2D layer
-model.add(Cropping2D(cropping=((70, 24), (0, 0)), input_shape=(160, 320, 3)))
+model.add(Cropping2D(cropping=((60, 20), (0, 0)), input_shape=(160, 320, 1)))
 
 model.add(Lambda(lambda image: K.tf.image.resize_images(image, (66, 200)),
                  input_shape=(row, col, ch),
