@@ -31,7 +31,7 @@ CROP_BOTTOM = 20
 VALIDATION_SPLIT = 0.02
 BATCH_SIZE = 32
 
-def generator(samples, batch_size=32):
+def input_generator(samples, batch_size=32):
     """Generate a stream of batched samples with batch_size."""
     num_samples = len(samples)
     # Generator does not terminate, may use more than one epoch.
@@ -66,8 +66,8 @@ def main():
     train_samples, validation_samples = train_test_split(samples, test_size=VALIDATION_SPLIT)
 
     # compile and train the model using the generator function
-    train_generator = generator(train_samples, batch_size=BATCH_SIZE)
-    validation_generator = generator(validation_samples, batch_size=BATCH_SIZE)
+    train_generator = input_generator(train_samples, batch_size=BATCH_SIZE)
+    validation_generator = input_generator(validation_samples, batch_size=BATCH_SIZE)
 
     model = Sequential()
 
